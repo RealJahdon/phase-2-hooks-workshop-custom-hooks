@@ -1,40 +1,29 @@
 import { useState, useEffect } from "react";
+import hasi from "../data/assets/hasi.png";
+
 
 export function useMouseCoordinates() {
-  // ✅ get the setCoordinates function back too!
-  // 👀 const [coordinates, setCoordinates] = useState(...)
-  const [coordinates] = useState({
+  const [coordinates, setCoordinates] = useState({
     clientX: 0,
     clientY: 0,
   });
 
   useEffect(() => {
-    /* 
-     ✅ create an event handler function to run when the mousemove event fires
-     set state with the clientX and clientY coordinates from the event
-     👀 function handler(event) {}
-    */
+    function handleMouseMove({ clientX, clientY }) {
+      setCoordinates({ clientX, clientY });
+    }
 
-    /* 
-     ✅ attach an event listener to the window for the mousemove event
-     📃 https://developer.mozilla.org/en-US/docs/Web/API/Element/mousemove_event
-     👀 window.addEventListener("mousemove", handler)
-    */
+    window.addEventListener("mousemove", handleMouseMove);
 
     return function cleanup() {
-      /* 
-       ✅ make sure to clean up your event listeners when your hook is no longer in use!
-       👀 window.removeEventListener("mousemove", handler)
-      */
+      window.removeEventListener("mousemove", handleMouseMove);
     };
   }, []);
 
   return coordinates;
 }
-
 export default function MyComponent() {
   const { clientX, clientY } = useMouseCoordinates();
-
   return (
     <div style={{ cursor: "none", width: "100%", height: "100%" }}>
       <h2>Mouse X: {clientX}</h2>
@@ -43,7 +32,6 @@ export default function MyComponent() {
     </div>
   );
 }
-
 function Cursor({ x, y }) {
   const style = {
     position: "fixed",
@@ -52,7 +40,7 @@ function Cursor({ x, y }) {
     height: "45px",
     width: "45px",
     borderRadius: "50%",
-    background: "blue",
+    background: `url(${hasi})`,
     backgroundSize: "cover",
     zIndex: 1,
   };
